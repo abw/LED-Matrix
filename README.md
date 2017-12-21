@@ -3,7 +3,7 @@ Design templates, schematics, PCB layouts and other resources for the constructi
 
 [YouTube Video - Part 1](https://www.youtube.com/watch?v=AXzYg67qcFU)
 
-See the [documents](document) directory for templates, cutting guides, etc.
+See the [documents](documents) directory for templates, cutting guides, etc.
 
 See the [hardware/Power Board](hardware/Power Board) directory for the schematic and board design for the power 
 distribution board.
