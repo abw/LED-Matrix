@@ -1,5 +1,7 @@
 #include "LEDMatrix.hpp"
 
+#define DEBUG_MATRIX 0
+
 LEDMatrix::LEDMatrix(
     CRGB *fastleds,
     unsigned int width, unsigned int height,
@@ -13,7 +15,9 @@ LEDMatrix::LEDMatrix(
     _orient = orient;
     _leds   = new uint16_t[_size];
     _fastleds = fastleds;
+#if DEBUG_MATRIX
     printf("Created LED matrix: %dx%d\n", _width, _height);
+#endif
     init();
 }
 
@@ -35,6 +39,7 @@ void LEDMatrix::init() {
     int dy      = top    ? (cols ? -1 : -_width ) : (cols ? 1 : _width);
     int x, y;
 
+#if DEBUG_MATRIX
     printf(
         "origin:%d bottom:%d top:%d left:%d right:%d\n",
         _origin, bottom, top, left, right
@@ -47,6 +52,7 @@ void LEDMatrix::init() {
         "xorigin:%d yorigin:%d dx:%d dy:%d\n",
         xorigin, yorigin, dx, dy
     );
+#endif
 
     // populate the mapping table from (x,y) to LED no
     for (y = 0; y < _height; y++) {
@@ -87,7 +93,9 @@ void LEDMatrix::init() {
         }
     }
 
+#if DEBUG_MATRIX
     debug();
+#endif
 }
 
 void LEDMatrix::debug() {
@@ -124,5 +132,7 @@ void LEDMatrix::screenRGB(uint8_t red, uint8_t green, uint8_t blue) {
 
 LEDMatrix::~LEDMatrix() {
     delete [] _leds;
+#if DEBUG_MATRIX
     printf("Destroyed LED matrix: %dx%d\n", _width, _height);
+#endif
 }
