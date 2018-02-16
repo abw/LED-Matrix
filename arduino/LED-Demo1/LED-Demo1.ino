@@ -52,8 +52,8 @@ TrailBlazer blazer(&matrix);
 const unsigned int maxFactor = 6;
 
 // global state variables
-unsigned long start;      // milliseconds elapsed
-double time;              // floating point seconds
+unsigned long start;      // milliseconds start time
+double time;              // floating point seconds elapsed
 bool running = false;
 
 // function prototypes;
