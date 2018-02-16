@@ -1,15 +1,18 @@
 #include "LEDMatrix.hpp"
 
 LEDMatrix::LEDMatrix(
+    CRGB *fastleds,
     unsigned int width, unsigned int height,
     LEDMatrixOrigin origin,
     LEDMatrixOrient orient
 ) {
     _width  = width;
     _height = height;
+    _size   = width * height;
     _origin = origin;
     _orient = orient;
-    _leds   = new uint16_t[width * _height];
+    _leds   = new uint16_t[_size];
+    _fastleds = fastleds;
     printf("Created LED matrix: %dx%d\n", _width, _height);
     init();
 }
@@ -105,6 +108,18 @@ unsigned int LEDMatrix::width() {
 
 unsigned int LEDMatrix::height() {
     return _height;
+}
+
+CRGB *LEDMatrix::led(unsigned int x, unsigned int y) {
+    return &_fastleds[
+        _leds[y * _width + x]
+    ];
+}
+
+void LEDMatrix::screenRGB(uint8_t red, uint8_t green, uint8_t blue) {
+    for (int i = 0; i < _size; i++) {
+        _fastleds[i].setRGB(red, green, blue);
+    }
 }
 
 LEDMatrix::~LEDMatrix() {

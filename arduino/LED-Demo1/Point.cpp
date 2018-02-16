@@ -1,12 +1,17 @@
 #include "Point.hpp"
 
-Point::Point(
-    unsigned int xx, unsigned int yy
+void setPoint(
+    Point *p,
+    unsigned int x, unsigned int y
 ) {
-    x = xx;
-    y = yy;
+    p->x = x;
+    p->y = y;
 }
 
-bool Point::operator==(const Point& other) {
-  return x == other.x && y == other.y;
+bool eqPoint(
+    Point *a,
+    Point *b
+) {
+    return a->x == b->x
+        && a->y == b->y;
 }

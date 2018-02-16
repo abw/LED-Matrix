@@ -14,12 +14,7 @@ typedef struct {
     unsigned int y;
 } Point;
 
-class Point {
-public:
-    Point(unsigned int xx=0, unsigned int yy=0);
-    unsigned int x;
-    unsigned int y;
-    bool operator==(const Point& other);
-};
+void setPoint(Point *p, unsigned int x, unsigned int y);
+bool eqPoint(Point *a, Point *b);
 
 #endif

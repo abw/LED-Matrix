@@ -9,10 +9,12 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <math.h>
-#include <vector>
 #include "LEDMatrix.hpp"
 #include "Point.hpp"
+#include "TrailBlazer.hpp"
 
 enum CursorFold { Wrap, Reflect };
 const double epsilon = 0.0001;
@@ -26,7 +28,12 @@ public:
         unsigned int trail=0
     );
     void debug();
-    void move(double time);
+    void debugMatrix();
+    void start(double time);
+    bool move(double time);
+    void changeDirection(double dx, double dy);
+    void blaze(TrailBlazer *tb);
+
     ~Cursor();
 private:
     LEDMatrix *_matrix;
@@ -36,11 +43,15 @@ private:
     double _dy;
     bool   _reflectX;
     bool   _reflectY;
-    unsigned int _width;
-    unsigned int _height;
-    unsigned int _trail;
-    Point _point;
-    std::vector<Point> _points;
+    unsigned int _width;    // width of matrix
+    unsigned int _height;   // height of matrix
+    unsigned int _trail;    // length of trail
+    unsigned int _size;     // total size (memory allocated) of points for head + trail
+    unsigned int _length;   // current length of trail
+    unsigned int _head;     // index of head element
+    double _start;          // start time
+    double _time;           // last animation time
+    Point *_points;
 };
 
 #endif
