@@ -11,9 +11,18 @@ const unsigned int pause   = 10;
 // create storage buffer for LED state
 CRGB leds[numLeds];
 
+// function prototype
+void walkRGB(uint8_t red, uint8_t green, uint8_t blue);
+
 void setup() {
     // register LEDs with FastLED library
     FastLED.addLeds<NEOPIXEL, ledPin>(leds, numLeds);
+}
+
+void loop() {
+    walkRGB(255, 0, 0);  // red
+    walkRGB(0, 255, 0);  // green
+    walkRGB(0, 0, 255);  // blue
 }
 
 void walkRGB(
@@ -29,10 +38,4 @@ void walkRGB(
         // rest a while and enjoy the view
         delay(pause);
     }
-}
-
-void loop() {
-    walkRGB(255, 0, 0);  // red
-    walkRGB(0, 255, 0);  // green
-    walkRGB(0, 0, 255);  // blue
 }
