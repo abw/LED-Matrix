@@ -1,5 +1,5 @@
-// Second test of LED Matrix using FastLED library
-// This adds the LEDMatrix to map (x,y) to LEDs
+// Third test of LED Matrix using FastLED library
+// This adds support for the push-button switches
 #include <FastLED.h>
 #include "LEDMatrix.hpp"
 #include "Button.hpp"
