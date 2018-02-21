@@ -36,7 +36,7 @@ public:
     unsigned int x(double fx, LEDMatrixBounds bounds=Wrap);
     unsigned int y(double fy, LEDMatrixBounds bounds=Wrap);
     Point xy(double fx, double fy, LEDMatrixBounds xbounds=Wrap, LEDMatrixBounds ybounds=Wrap);
-    CRGB *led(unsigned int x, unsigned int y);
+    CRGB &led(unsigned int x, unsigned int y);
     ~LEDMatrix();
     void screenRGB(uint8_t red, uint8_t green, uint8_t blue);
     void init();

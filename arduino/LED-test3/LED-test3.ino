@@ -6,8 +6,8 @@
 
 // constants for width, height, pins, etc.
 const unsigned int ledPin     = 12;
-const unsigned int width      = 18;
-const unsigned int height     = 24;
+const unsigned int width      = 24;
+const unsigned int height     = 18;
 const unsigned int numLeds    = width * height;
 const unsigned int numButtons = 4;
 const unsigned int pause      = 10;
@@ -16,8 +16,7 @@ const unsigned int pause      = 10;
 CRGB leds[numLeds];
 
 // create new matrix
-// LEDMatrix matrix(leds, width, height, BottomRight, RowsSnake);
-LEDMatrix matrix(leds, width, height, TopRight, ColsSnake);
+LEDMatrix matrix(leds, width, height, BottomRight, RowsSnake);
 
 // define the buttons, each has an input pin and an LED pin
 Button redButton(2, 3);
@@ -63,11 +62,12 @@ void walk() {
     // iterate over each LED
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            // turn it on, turn it on again...
-            *(matrix.led(x, y)) = colour;
+            // set pixel colour
+            matrix.led(x, y) = colour;
+            // send LED data to the hardware
             FastLED.show();
             // turn it off for the next loop iteration
-            matrix.led(x, y)->setRGB(0, 0, 0);
+            matrix.led(x, y).setRGB(0, 0, 0);
             // rest a while and enjoy the view
             delay(pause);
             // then check the buttons

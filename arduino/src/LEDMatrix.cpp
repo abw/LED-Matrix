@@ -119,8 +119,8 @@ Point LEDMatrix::xy(
     return p;
 }
 
-CRGB *LEDMatrix::led(unsigned int x, unsigned int y) {
-    return &_leds[
+CRGB &LEDMatrix::led(unsigned int x, unsigned int y) {
+    return _leds[
         _xymap[y * _width + x]
     ];
 }

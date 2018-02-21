@@ -30,8 +30,9 @@ void walkRGB(
 ) {
     // iterate over each LED
     for (int i = 0; i < numLeds; i++) {
-        // turn it on, turn it on again...
+        // set pixel colour
         leds[i].setRGB(red, green, blue);
+        // send LED data to the hardware
         FastLED.show();
         // turn it off for the next loop iteration
         leds[i].setRGB(0, 0, 0);
