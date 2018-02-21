@@ -59,8 +59,9 @@ void loop() {
 }
 
 void walk() {
-    // iterate over each LED
+    // iterate y from bottom to top
     for (int y = 0; y < height; y++) {
+        // iterate x from left to right
         for (int x = 0; x < width; x++) {
             // set pixel colour
             matrix.led(x, y) = colour;
@@ -78,13 +79,10 @@ void walk() {
     }
 }
 
-unsigned int checkButtons() {
-    int updated = 0;
-
+void checkButtons() {
     for (int i = 0; i < numButtons; i++) {
-        updated += buttons[i]->check();
+        buttons[i]->check();
     }
-    return updated;
 }
 
 void pushRed(Button *b) {
