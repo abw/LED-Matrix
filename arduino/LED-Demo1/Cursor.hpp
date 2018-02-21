@@ -16,15 +16,12 @@
 #include "Point.hpp"
 #include "TrailBlazer.hpp"
 
-enum CursorFold { Wrap, Reflect };
-const double epsilon = 0.0001;
-
 class Cursor {
 public:
     Cursor(
         LEDMatrix *matrix,
         long xorg, long yorg, double dx, double dy,
-        CursorFold foldX=Wrap, CursorFold foldY=Wrap,
+        LEDMatrixBounds foldX=Wrap, LEDMatrixBounds foldY=Wrap,
         unsigned int trail=0
     );
     void debug();
@@ -41,7 +38,8 @@ private:
     long   _yorg;
     double _dx;
     double _dy;
-    bool   _reflectX;
+    LEDMatrixBounds   _foldX;
+    LEDMatrixBounds   _foldY;
     bool   _reflectY;
     unsigned int _width;    // width of matrix
     unsigned int _height;   // height of matrix

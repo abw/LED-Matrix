@@ -1,9 +1,7 @@
 #include "LEDMatrix.hpp"
 
-#define DEBUG_MATRIX 0
-
 LEDMatrix::LEDMatrix(
-    CRGB *fastleds,
+    CRGB *leds,
     unsigned int width, unsigned int height,
     LEDMatrixOrigin origin,
     LEDMatrixOrient orient
@@ -13,11 +11,8 @@ LEDMatrix::LEDMatrix(
     _size   = width * height;
     _origin = origin;
     _orient = orient;
-    _leds   = new uint16_t[_size];
-    _fastleds = fastleds;
-#if DEBUG_MATRIX
-    printf("Created LED matrix: %dx%d\n", _width, _height);
-#endif
+    _xymap  = new uint16_t[_size];
+    _leds   = leds;
     init();
 }
 
@@ -39,21 +34,6 @@ void LEDMatrix::init() {
     int dy      = top    ? (cols ? -1 : -_width ) : (cols ? 1 : _width);
     int x, y;
 
-#if DEBUG_MATRIX
-    printf(
-        "origin:%d bottom:%d top:%d left:%d right:%d\n",
-        _origin, bottom, top, left, right
-    );
-    printf(
-        "orient:%d rows:%d cols:%d snake:%d zigzag:%d\n",
-        _orient, rows, cols, snake, zigzag
-    );
-    printf(
-        "xorigin:%d yorigin:%d dx:%d dy:%d\n",
-        xorigin, yorigin, dx, dy
-    );
-#endif
-
     // populate the mapping table from (x,y) to LED no
     for (y = 0; y < _height; y++) {
         for (x = 0; x < _width; x++) {
@@ -61,7 +41,7 @@ void LEDMatrix::init() {
             int ydiff = y - yorigin;
             unsigned int ledno = (xdiff * dx) + (ydiff * dy);
             //printf("%d,%d => %d\n", x, y, ledno);
-            _leds[y * _width + x] = ledno;
+            _xymap[y * _width + x] = ledno;
         }
     }
     // rearrange to account for rows/cols that snake back and forth
@@ -73,9 +53,9 @@ void LEDMatrix::init() {
                 int base = yy * _width;
                 for (int x = 0; x < _width / 2; x++) {
                     int z   = maxx - x;
-                    int tmp = _leds[base + x];
-                    _leds[base + x] = _leds[base + z];
-                    _leds[base + z] = tmp;
+                    int tmp = _xymap[base + x];
+                    _xymap[base + x] = _xymap[base + z];
+                    _xymap[base + z] = tmp;
                 }
             }
         }
@@ -85,28 +65,12 @@ void LEDMatrix::init() {
                 int xx = right ? maxx - x : x;
                 for (int y = 0; y < _height / 2; y++) {
                     int yy  = maxy - y;
-                    int tmp = _leds[y * _width + xx];
-                    _leds[y * _width + xx] = _leds[yy * _width + xx];
-                    _leds[yy * _width + xx] = tmp;
+                    int tmp = _xymap[y * _width + xx];
+                    _xymap[y * _width + xx] = _xymap[yy * _width + xx];
+                    _xymap[yy * _width + xx] = tmp;
                 }
             }
         }
-    }
-
-#if DEBUG_MATRIX
-    debug();
-#endif
-}
-
-void LEDMatrix::debug() {
-    // dump table for debugging
-    // NOTE: we do this in reverse order because the origin is at the
-    // bottom
-    for (int y = _height - 1; y >= 0; y--) {
-        for (int x = 0; x < _width; x++) {
-            printf("%3d ", _leds[y * _width + x]);
-        }
-        printf("\n");
     }
 }
 
@@ -155,22 +119,30 @@ Point LEDMatrix::xy(
     return p;
 }
 
-
 CRGB *LEDMatrix::led(unsigned int x, unsigned int y) {
-    return &_fastleds[
-        _leds[y * _width + x]
+    return &_leds[
+        _xymap[y * _width + x]
     ];
 }
 
 void LEDMatrix::screenRGB(uint8_t red, uint8_t green, uint8_t blue) {
     for (int i = 0; i < _size; i++) {
-        _fastleds[i].setRGB(red, green, blue);
+        _leds[i].setRGB(red, green, blue);
     }
 }
 
 LEDMatrix::~LEDMatrix() {
-    delete [] _leds;
-#if DEBUG_MATRIX
-    printf("Destroyed LED matrix: %dx%d\n", _width, _height);
-#endif
+    delete [] _xymap;
+}
+
+void LEDMatrix::debug() {
+    // dump table for debugging
+    // NOTE: we do this in reverse order because the origin is at the
+    // bottom
+    for (int y = _height - 1; y >= 0; y--) {
+        for (int x = 0; x < _width; x++) {
+            printf("%3d ", _xymap[y * _width + x]);
+        }
+        printf("\n");
+    }
 }

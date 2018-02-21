@@ -11,12 +11,16 @@
 #include <FastLED.h>
 #include <inttypes.h>
 #include <stdio.h>
-#include "Point.hpp"
 
 enum LEDMatrixOrigin { TopLeft, TopRight, BottomLeft, BottomRight   };
 enum LEDMatrixOrient { RowsSnake, RowsZigZag, ColsSnake, ColsZigZag };
 enum LEDMatrixBounds { Wrap, Reflect };
 const double epsilon = 0.0001;
+
+typedef struct {
+    unsigned int x;
+    unsigned int y;
+} Point;
 
 class LEDMatrix {
 public:
@@ -37,11 +41,11 @@ public:
     void screenRGB(uint8_t red, uint8_t green, uint8_t blue);
     void init();
 private:
-    CRGB *_fastleds;
+    CRGB *_leds;
     unsigned int _width;
     unsigned int _height;
     unsigned int _size;
-    uint16_t *_leds;
+    uint16_t *_xymap;
     LEDMatrixOrigin _origin;
     LEDMatrixOrient _orient;
 };

@@ -3,8 +3,9 @@
 #include "Point.hpp"
 #include "Cursor.hpp"
 #include "Button.hpp"
+#include "SignWriter.hpp"
 
-#define DEBUG_SERIAL 0
+#define DEBUG_SERIAL 1
 
 // Define the LED matrix as (width, height)
 const unsigned int ledPin  = 12;
@@ -32,15 +33,24 @@ Button *buttons[numButtons] = {
 };
 
 // a cursor is a snake-like path that moves around the array
+//Cursor cursor(
+//    &matrix,
+//    0, 8,               // start position x, y
+//    31, 11,             // velocity vector x, y
+//    Reflect, Reflect,   // edge handling x, y
+//    48                  // trail length
+//);
 Cursor cursor(
     &matrix,
-    0, 8,               // start position x, y
-    31, 11,             // velocity vector x, y
-    Reflect, Reflect,   // edge handling x, y
-    48                  // trail length
+    11, 3,         // start position x, y
+    -12, 0,        // velocity vector x, y
+    Wrap, Wrap,    // edge handling x, y
+    1              // trail length
 );
 // a trailblazer is a bit of code to render the cursor trail to the LEDs
 TrailBlazer blazer(&matrix);
+// a signwriter is a subclass of TrailBlazer to test text rendering
+SignWriter writer(&matrix);
 
 // I can't think of a better name for this variable that determines the
 // maximum speed of the cursor.  The maximum range of movement (pixels
@@ -79,6 +89,7 @@ void setup() {
     // where buttons are created above).  When the green button is pressed
     // the other buttons are activated and the LED patterns display.
     greenButton.onPress(startup);
+
 #if DEBUG_SERIAL
     Serial.begin(9600);
     Serial.println("setup");
@@ -100,6 +111,7 @@ void startup(Button *b) {
     running = true;
     start = millis();
     time = 0;
+
 #if DEBUG_SERIAL
     Serial.println("startup");
 #endif
@@ -112,7 +124,8 @@ void loop() {
     if (running) {
         // animate here
         cursor.move(time);
-        cursor.blaze(&blazer);
+        //cursor.blaze(&blazer);
+        cursor.blaze(&writer);
         FastLED.show();
     }
 
@@ -145,18 +158,21 @@ void pushRed(Button *b) {
 #if DEBUG_SERIAL
     Serial.println("Push Red");
 #endif
+    cursor.changeDirection(-12, 0);
 }
 
 void pushGreen(Button *b) {
 #if DEBUG_SERIAL
     Serial.println("Push Green");
 #endif
+    cursor.changeDirection(0, 9);
 }
 
 void pushBlue(Button *b) {
 #if DEBUG_SERIAL
     Serial.println("Push Blue");
 #endif
+    cursor.changeDirection(5, 3);
 }
 
 void pushWhite(Button *b) {

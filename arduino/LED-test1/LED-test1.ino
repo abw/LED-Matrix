@@ -1,28 +1,38 @@
+// Simple test of LED Matrix using FastLED library
 #include <FastLED.h>
 
-#define NUM_COLS   24
-#define NUM_ROWS   18
-#define NUM_LEDS (NUM_COLS * NUM_ROWS)
-#define LED_PIN    12
-#define PAUSE      10 
+// constants for width, height, pins, etc.
+const unsigned int ledPin  = 12;
+const unsigned int width   = 24;
+const unsigned int height  = 18;
+const unsigned int numLeds = width * height;
+const unsigned int pause   = 10;
 
-CRGB leds[NUM_LEDS];
+// create storage buffer for LED state
+CRGB leds[numLeds];
 
 void setup() {
-    FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
+    // register LEDs with FastLED library
+    FastLED.addLeds<NEOPIXEL, ledPin>(leds, numLeds);
 }
 
-void walkRGB(uint8_t red, uint8_t green, uint8_t blue, uint8_t pause) {
-    for (int i = 0; i < NUM_LEDS; i++) {
+void walkRGB(
+    uint8_t red, uint8_t green, uint8_t blue
+) {
+    // iterate over each LED
+    for (int i = 0; i < numLeds; i++) {
+        // turn it on, turn it on again...
         leds[i].setRGB(red, green, blue);
         FastLED.show();
+        // turn it off for the next loop iteration
         leds[i].setRGB(0, 0, 0);
+        // rest a while and enjoy the view
         delay(pause);
     }
 }
 
 void loop() {
-    walkRGB(255, 0, 0, PAUSE);
-    walkRGB(0, 255, 0, PAUSE);
-    walkRGB(0, 0, 255, PAUSE);
+    walkRGB(255, 0, 0);  // red
+    walkRGB(0, 255, 0);  // green
+    walkRGB(0, 0, 255);  // blue
 }

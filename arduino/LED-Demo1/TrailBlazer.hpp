@@ -14,13 +14,17 @@
 class TrailBlazer {
 public:
     TrailBlazer(LEDMatrix *matrix);
-    void blaze(
+    virtual void blaze(
         unsigned int i, unsigned int length,
         unsigned int x, unsigned int width,
         unsigned int y, unsigned int height,
         double time
     );
-private:
+    virtual void render(
+        uint8_t x, uint8_t y,
+        uint8_t hue, uint8_t sat, uint8_t val
+    );
+protected:
     LEDMatrix *_matrix;
 };
 

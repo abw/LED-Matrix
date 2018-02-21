@@ -5,7 +5,7 @@
 Cursor::Cursor(
     LEDMatrix *matrix,
     long xorg, long yorg, double dx, double dy,
-    CursorFold foldX, CursorFold foldY,
+    LEDMatrixBounds foldX, LEDMatrixBounds foldY,
     unsigned int trail
 ) {
     _matrix   = matrix;
@@ -13,8 +13,8 @@ Cursor::Cursor(
     _yorg     = yorg;
     _dx       = dx;
     _dy       = dy;
-    _reflectX = (foldX == Reflect);
-    _reflectY = (foldY == Reflect);
+    _foldX    = foldX;
+    _foldY    = foldY;
     _width    = matrix->width();
     _height   = matrix->height();
     _trail    = trail;
@@ -45,30 +45,13 @@ void Cursor::start(double time) {
 }
 
 bool Cursor::move(double time) {
-    double dt = time - _start;
-    double fx = _xorg + _dx * dt;
-    double fy = _yorg + _dy * dt;
-    long   ix = floor(fx < 0 ? fx - epsilon : fx + epsilon);
-    long   iy = floor(fy < 0 ? fy - epsilon : fy + epsilon);
-    long   lx = ix % _width;
-    long   ly = iy % _height;
-    unsigned long ledx = fx < 0 ? _width  - 1 + lx : lx;
-    unsigned long ledy = fy < 0 ? _height - 1 + ly : ly;
-    _time = time;
-
-    if (_reflectX) {
-        int rx = ix < 0 ? abs(ix) / _width + 1 : ix / _width;
-        if (rx % 2) {
-            ledx = _width - 1 - ledx;
-        }
-    }
-    if (_reflectY) {
-        int ry = iy < 0 ? (abs(iy) / _height + 1) : iy / _height;
-        if (ry % 2) {
-            ledy = _height - 1 - ledy;
-        }
-    }
-    if (_points[_head].x == ledx && _points[_head].y == ledy) {
+    _time = time - _start;
+    Point p = _matrix->xy(
+        _xorg + _dx * _time,
+        _yorg + _dy * _time,
+        _foldX, _foldY
+    );
+    if (_points[_head].x == p.x && _points[_head].y == p.y) {
         return false;
     }
 
@@ -84,8 +67,8 @@ bool Cursor::move(double time) {
 #endif
 
     _head = (_head + 1) % _size;
-    _points[_head].x = ledx;
-    _points[_head].y = ledy;
+    _points[_head].x = p.x;
+    _points[_head].y = p.y;
 
     if (_length < _size) {
         _length++;
@@ -115,13 +98,13 @@ void Cursor::changeDirection(double dx, double dy) {
     _yorg  = _points[_head].y;
     _dx    = dx;
     _dy    = dy;
-    _start = _time;
+    _start = _start + _time;
 }
 
 void Cursor::blaze(TrailBlazer *tb) {
     // blaze the trail in reverse order from tail to head
     // if the trail crosses itself then the head should dominate
-    for (int i = _length - 1; i >= 0; i--) {
+    for (int i = _size - 1; i >= 0; i--) {
         Point *p = &_points[(_head + _size - i) % _size];
         tb->blaze(i, _length, p->x, _width, p->y, _height, _time);
     }
