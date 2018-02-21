@@ -5,8 +5,8 @@
 
 // constants for width, height, pins, etc.
 const unsigned int ledPin  = 12;
-const unsigned int width   = 18;
-const unsigned int height  = 24;
+const unsigned int width   = 24;
+const unsigned int height  = 18;
 const unsigned int numLeds = width * height;
 const unsigned int pause   = 10;
 
@@ -14,8 +14,7 @@ const unsigned int pause   = 10;
 CRGB leds[numLeds];
 
 // create new matrix
-//LEDMatrix matrix(leds, width, height, BottomRight, RowsSnake);
-LEDMatrix matrix(leds, width, height, TopRight, ColsSnake);
+LEDMatrix matrix(leds, width, height, BottomRight, RowsSnake);
 
 void setup() {
     // register LEDs with FastLED library
