@@ -12,9 +12,9 @@ Watch the YouTube video series:
 The [documents](documents) directory contains plans, templates, cutting
 guides, etc.
 
-See the [hardware/Power Board](hardware/Power%20Board) directory for the
-schematic and board design for the [power distribution board](Power%20Board/v1.2)
-and the main [control board](Control%20Board/v1.0).
+See the [hardware](hardware) directory for the
+schematics and board designs for the [power distribution board](hardware/Power%20Board/v1.2)
+and the main [control board](hardware/Control%20Board/v1.0).
 
 The [arduino](arduino) directory contains the source code for Arduino firmware.
 This includes the examples that are shown in part 4 of the video series.
