@@ -27,7 +27,7 @@ void SignWriter::render(
                 _matrix->led(
                     _matrix->x(x + cx, Wrap),
                     _matrix->y(y + cy, Wrap)
-                )->setHSV((hue + cy * 10) % 255, sat, val);
+                ).setHSV((hue + cy * 10) % 255, sat, val);
             }
             factor = factor >> 1;
         }

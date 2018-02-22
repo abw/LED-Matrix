@@ -34,7 +34,7 @@ unsigned long start;      // milliseconds start time
 CRGB colour = CRGB::Red;  // LED matrix colour
 
 // function prototypes
-unsigned int checkButtons();
+void checkButtons();
 void pushRed(Button *b);
 void pushGreen(Button *b);
 void pushBlue(Button *b);

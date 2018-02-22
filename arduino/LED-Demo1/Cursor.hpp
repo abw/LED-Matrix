@@ -13,7 +13,7 @@
 #include <string.h>
 #include <math.h>
 #include "LEDMatrix.hpp"
-#include "Point.hpp"
+//#include "Point.hpp"
 #include "TrailBlazer.hpp"
 
 class Cursor {

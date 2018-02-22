@@ -1,6 +1,6 @@
 #include <FastLED.h>
 #include "LEDMatrix.hpp"
-#include "Point.hpp"
+//#include "Point.hpp"
 #include "Cursor.hpp"
 #include "Button.hpp"
 #include "SignWriter.hpp"
@@ -33,24 +33,24 @@ Button *buttons[numButtons] = {
 };
 
 // a cursor is a snake-like path that moves around the array
-//Cursor cursor(
-//    &matrix,
-//    0, 8,               // start position x, y
-//    31, 11,             // velocity vector x, y
-//    Reflect, Reflect,   // edge handling x, y
-//    48                  // trail length
-//);
 Cursor cursor(
     &matrix,
-    11, 3,         // start position x, y
-    -12, 0,        // velocity vector x, y
-    Wrap, Wrap,    // edge handling x, y
-    1              // trail length
+    0, 8,               // start position x, y
+    31, 11,             // velocity vector x, y
+    Reflect, Reflect,   // edge handling x, y
+    48                  // trail length
 );
+//Cursor cursor(
+//    &matrix,
+//    11, 3,         // start position x, y
+//    -12, 0,        // velocity vector x, y
+//    Wrap, Wrap,    // edge handling x, y
+//    1              // trail length
+//);
 // a trailblazer is a bit of code to render the cursor trail to the LEDs
 TrailBlazer blazer(&matrix);
 // a signwriter is a subclass of TrailBlazer to test text rendering
-SignWriter writer(&matrix);
+//SignWriter writer(&matrix);
 
 // I can't think of a better name for this variable that determines the
 // maximum speed of the cursor.  The maximum range of movement (pixels
@@ -124,8 +124,8 @@ void loop() {
     if (running) {
         // animate here
         cursor.move(time);
-        //cursor.blaze(&blazer);
-        cursor.blaze(&writer);
+        cursor.blaze(&blazer);
+        //cursor.blaze(&writer);
         FastLED.show();
     }
 
